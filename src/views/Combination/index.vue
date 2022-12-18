@@ -30,7 +30,7 @@
         </el-form-item>
         
         <el-form-item label="排序" style="margin-right:30px;margin-left:30px">
-          <el-select v-model="formInline.gender" placeholder="请选择数据排序类型">
+          <el-select v-model="formInline.order" placeholder="请选择数据排序类型">
             <el-option label="销量Top10" value="sale_num"></el-option>
             <el-option label="销售额Top10" value="sum_pay"></el-option>
           </el-select>
@@ -39,13 +39,11 @@
           <el-button type="primary" @click="onSubmit">查询</el-button>
         </el-form-item>
       </el-form>
-
     </div>
-          
+    
     <div v-if="visible" class="chart-container">
       <chart :params="passValue" height="100%" width="100%" />
     </div>
-    <el-empty description="描述文字"></el-empty>
   </div>
 </template>
 
@@ -62,11 +60,13 @@ export default {
         age: "",
         gender: "",
         marry: "",
+        order:"",
       },
       passValue: {
         age: "",
         gender: "",
         marry: "",
+        order:"",
       },
     };
   },
@@ -76,6 +76,7 @@ export default {
       this.passValue.age = this.formInline.age;
       this.passValue.gender = this.formInline.gender;
       this.passValue.marry = this.formInline.marry;
+      this.passValue.order = this.formInline.order;
       console.log("pass", this.passValue);
       this.visible = true;
     },

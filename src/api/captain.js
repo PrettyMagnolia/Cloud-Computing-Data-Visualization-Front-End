@@ -41,3 +41,16 @@ export function getTopPay() {
     method: 'get',
   })
 }
+
+export function getCombination(form) {
+  return request({
+    url: '/api/getCombination',
+    method: 'get',
+    params: {
+      age: form.age,
+      gender: form.gender,
+      marry: form.marry,
+      order: form.order
+    }
+  })
+}

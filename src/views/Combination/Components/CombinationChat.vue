@@ -5,7 +5,7 @@
 <script>
 import echarts from "echarts";
 import resize from "./resize";
-import { getTopPay } from "@/api/captain";
+import { getCombination } from "@/api/captain";
 
 export default {
   mixins: [resize],
@@ -32,8 +32,30 @@ export default {
   },
   watch:{
     params:{
-      handler(newValue,oldValue){
+      async handler(newValue,oldValue){
+        if(newValue.order == "sale_num"){
+          this.title = "产品销量Top10";
+        }
+        else{
+          this.title = "产品销售额Top10";
+        }
         console.log("modify",newValue);
+        this.product_id = [];
+        this.sale_num = [];
+        this.sum_pay = [];
+        await getCombination(newValue)
+        .then((res) => {
+          console.log(res.data);
+          res.data.forEach(element => {
+            this.product_id.push(element.product_id);
+            this.sale_num.push(element.sale_num);
+            this.sum_pay.push(parseFloat(element.sum_pay)/10000);
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        this.initChart();
       },
       deep:true,
     }
@@ -44,22 +66,29 @@ export default {
       product_id: [],
       sale_num: [],
       sum_pay: [],
+      title: ""
     };
   },
   async mounted() {
+    if(this.params.order == "sale_num"){
+      this.title = "产品销量Top10";
+    }
+    else{
+      this.title = "产品销售额Top10";
+    }
     console.log("children:",this.params)
-    // await getTopPay()
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     res.data.forEach(element => {
-    //       this.product_id.push(element.product_id);
-    //       this.sale_num.push(element.sale_num);
-    //       this.sum_pay.push(parseFloat(element.sum_pay)/10000);
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    await getCombination(this.params)
+      .then((res) => {
+        console.log(res.data);
+        res.data.forEach(element => {
+          this.product_id.push(element.product_id);
+          this.sale_num.push(element.sale_num);
+          this.sum_pay.push(parseFloat(element.sum_pay)/10000);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     this.initChart();
   },
   beforeDestroy() {
@@ -75,7 +104,7 @@ export default {
       this.chart.setOption({
         backgroundColor: "#344b58",
         title: {
-          text: "产品销售额Top10",
+          text: this.title,
           x: "20",
           top: "20",
           textStyle: {
