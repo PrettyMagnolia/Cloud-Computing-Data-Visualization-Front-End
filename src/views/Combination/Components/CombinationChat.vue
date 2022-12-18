@@ -26,6 +26,17 @@ export default {
       type: String,
       default: "200px",
     },
+    params: {
+      type: Object
+    }
+  },
+  watch:{
+    params:{
+      handler(newValue,oldValue){
+        console.log("modify",newValue);
+      },
+      deep:true,
+    }
   },
   data() {
     return {
@@ -36,6 +47,7 @@ export default {
     };
   },
   async mounted() {
+    console.log("children:",this.params)
     // await getTopPay()
     //   .then((res) => {
     //     console.log(res.data);
