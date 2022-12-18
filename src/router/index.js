@@ -106,6 +106,18 @@ export const constantRoutes = [
         meta: { title: '销售额Top10', icon: 'guide', noCache: true }
       }
     ]
+  },
+  {
+    path: '/combination',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/Combination'),
+        name: 'Combination',
+        meta: { title: '组合查询', icon: 'guide', noCache: true }
+      }
+    ]
   }
 ]
 
